@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô hình Phản ứng Hóa Học</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eef7fa;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+            color: #00509e;
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            margin: 20px auto;
+            border: 2px solid #bbb;
+            border-radius: 10px;
+            background-color: #f0fcff;
+        }
+
+        .beaker {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 300px;
+            background: linear-gradient(to top, #87ceeb 60%, transparent 40%);
+            border: 3px solid #00509e;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .beaker::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .molecule {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: #ffeb3b;
+            color: #000;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .electron {
+            position: absolute;
+            background-color: #000;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+        }
+
+        .bubble {
+            position: absolute;
+            background-color: rgba(135, 206, 250, 0.8);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: floatUp 4s infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px);
+                opacity: 0;
+            }
+        }
+
+        .btn {
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mô hình Phản ứng Hóa Học</h1>
+    <div class="container">
+        <div class="beaker">
+            <div class="molecule" id="ethylene" style="top: 180px; left: 20px;">CH₂=CH₂</div>
+            <div class="molecule" id="hPlus" style="top: 120px; left: 80px;">H⁺</div>
+        </div>
+    </div>
+    <button class="btn" onclick="startReaction()">Bắt đầu phản ứng</button>
+
+    <script>
+        function createBubble(x, y) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.left = `${x}px`;
+            bubble.style.top = `${y}px`;
+            document.querySelector('.container').appendChild(bubble);
+
+            setTimeout(() => bubble.remove(), 4000);
+        }
+
+        function startReaction() {
+            const ethylene = document.getElementById('ethylene');
+            const hPlus = document.getElementById('hPlus');
+
+            // Giai đoạn 1
+            ethylene.style.transition = 'transform 2s';
+            ethylene.style.transform = 'translateX(100px)';
+
+            hPlus.style.transition = 'transform 2s';
+            hPlus.style.transform = 'translateX(-50px)';
+
+            setTimeout(() => {
+                ethylene.textContent = 'CH₂⁺-CH₃';
+                hPlus.style.opacity = '0';
+
+                // Giai đoạn 2
+                const water = document.createElement('div');
+                water.className = 'molecule';
+                water.textContent = 'H₂O';
+                water.style.top = '50px';
+                water.style.left = '200px';
+                document.querySelector('.beaker').appendChild(water);
+
+                water.style.transition = 'transform 2s';
+                water.style.transform = 'translateX(-50px)';
+
+                setTimeout(() => {
+                    ethylene.textContent = 'CH₃-CH₂-OH';
+                    water.remove();
+
+                    const hPlusNew = document.createElement('div');
+                    hPlusNew.className = 'molecule';
+                    hPlusNew.textContent = 'H⁺';
+                    hPlusNew.style.top = '120px';
+                    hPlusNew.style.left = '300px';
+                    document.querySelector('.beaker').appendChild(hPlusNew);
+
+                }, 2000);
+            }, 2000);
+
+            // Bong bóng phản ứng
+            createBubble(200, 180);
+            createBubble(250, 200);
+            createBubble(300, 220);
+        }
+    </script>
+</body>
+</html>
